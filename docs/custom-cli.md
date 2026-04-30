@@ -8,6 +8,8 @@ It does not try to repeat the full upstream MeshCore CLI surface.
 
 These commands are available on `*_repeater_mqtt` firmware targets.
 
+No-argument `get` commands must be entered exactly as shown.
+
 ### MQTT Status And Routing
 
 - `get mqtt.status`: shows WiFi, NTP, IATA, endpoint status, status publishing state, and TX state.

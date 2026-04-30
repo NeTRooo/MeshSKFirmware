@@ -574,4 +574,10 @@ releases:
       - type: docs
         area: mqtt
         text: "Updated the CLI and web-panel docs to describe retained offline status publishing for broker toggles and IATA changes."
+      - type: fixed
+        area: cli
+        text: "Matched no-argument MQTT and Wi-Fi `get` commands exactly so malformed commands with trailing text no longer execute as valid getters."
+      - type: changed
+        area: build
+        text: "Aligned release-style builds with direct PlatformIO builds by using the firmware source build date instead of stamping the current build day into `ver` output."
     breaking_changes: []
