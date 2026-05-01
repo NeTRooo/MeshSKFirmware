@@ -181,10 +181,8 @@ bool MQTTUplink::isUnsetIataValue(const char* iata) {
 }
 
 const char* MQTTUplink::brokerCaCert(const BrokerSpec& spec) {
-  if (spec.bit == kEastmeshBit) {
-    return mqtt_ca_certs::kEastmeshIsrgRootX1Pem;
-  }
-  return mqtt_ca_certs::kLetsmeshWe1Pem;
+  (void)spec;
+  return mqtt_ca_certs::kIsrgRootX1Pem;
 }
 
 uint8_t MQTTUplink::normalizeEnabledMask(uint8_t mask) {
@@ -250,7 +248,7 @@ bool MQTTUplink::preflightBroker(BrokerState& broker) const {
                "Upgrade: websocket\r\n"
                "Sec-WebSocket-Version: 13\r\n"
                "Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n"
-               "User-Agent: MeshCore-EastMesh\r\n"
+               "User-Agent: MeshCore-SKMesh\r\n"
                "Host: ");
   client.print(broker.spec->host);
   client.print(":443\r\n\r\n");

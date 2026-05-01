@@ -42,13 +42,13 @@ runs:
 
     # Active release tag formats:
     #   companion-wifi-v1.2.3
-    #   repeater-mqtt-eastmesh-v1.0.1
+    #   repeater-mqtt-skmesh-v1.0.1
     # with OFFICIAL_MESHCORE_VERSION=v1.2.3 configured as a GitHub variable.
     #
     # This exports:
     #   companion-wifi-v1.2.3 -> FIRMWARE_VERSION=v1.2.3, RELEASE_VERSION=v1.2.3
-    #   repeater-mqtt-eastmesh-v1.0.1 -> FIRMWARE_VERSION=v1.2.3, EASTMESH_VERSION=v1.0.1,
-    #                                    RELEASE_VERSION=v1.2.3-eastmesh-v1.0.1
+    #   repeater-mqtt-skmesh-v1.0.1 -> FIRMWARE_VERSION=v1.2.3, SKMESH_VERSION=v1.0.1,
+    #                                  RELEASE_VERSION=v1.2.3-skmesh-v1.0.1
     - name: Extract Version Info
       shell: bash
       run: |
@@ -58,22 +58,22 @@ runs:
           echo "GIT_TAG_NAME=" >> "$GITHUB_ENV"
           echo "GIT_TAG_VERSION=" >> "$GITHUB_ENV"
           echo "OFFICIAL_MESHCORE_VERSION=$STATIC_OFFICIAL_VERSION" >> "$GITHUB_ENV"
-          echo "EASTMESH_VERSION=" >> "$GITHUB_ENV"
+          echo "SKMESH_VERSION=" >> "$GITHUB_ENV"
           echo "FIRMWARE_VERSION=$STATIC_OFFICIAL_VERSION" >> "$GITHUB_ENV"
           echo "RELEASE_VERSION=$STATIC_OFFICIAL_VERSION" >> "$GITHUB_ENV"
           exit 0
         fi
 
         GIT_TAG_NAME="${GITHUB_REF#refs/tags/}"
-        EASTMESH_VERSION=""
+        SKMESH_VERSION=""
         FIRMWARE_VERSION="$STATIC_OFFICIAL_VERSION"
 
-        if [[ "$GIT_TAG_NAME" =~ ^repeater-mqtt-eastmesh-(v[[:alnum:]._-]+)$ ]]; then
+        if [[ "$GIT_TAG_NAME" =~ ^repeater-mqtt-skmesh-(v[[:alnum:]._-]+)$ ]]; then
           if [[ -z "$STATIC_OFFICIAL_VERSION" ]]; then
-            echo "OFFICIAL_MESHCORE_VERSION must be set for EastMesh release tags" >&2
+            echo "OFFICIAL_MESHCORE_VERSION must be set for SKMesh release tags" >&2
             exit 1
           fi
-          EASTMESH_VERSION="${BASH_REMATCH[1]}"
+          SKMESH_VERSION="${BASH_REMATCH[1]}"
         elif [[ "$GIT_TAG_NAME" =~ ^companion-wifi-(v[[:alnum:]._-]+)$ ]]; then
           FIRMWARE_VERSION="${BASH_REMATCH[1]}"
         else
@@ -87,13 +87,13 @@ runs:
         fi
 
         RELEASE_VERSION="$FIRMWARE_VERSION"
-        if [[ -n "$EASTMESH_VERSION" ]]; then
-          RELEASE_VERSION="${RELEASE_VERSION}-eastmesh-${EASTMESH_VERSION}"
+        if [[ -n "$SKMESH_VERSION" ]]; then
+          RELEASE_VERSION="${RELEASE_VERSION}-skmesh-${SKMESH_VERSION}"
         fi
 
         echo "GIT_TAG_NAME=$GIT_TAG_NAME" >> "$GITHUB_ENV"
         echo "GIT_TAG_VERSION=$RELEASE_VERSION" >> "$GITHUB_ENV"
         echo "OFFICIAL_MESHCORE_VERSION=$FIRMWARE_VERSION" >> "$GITHUB_ENV"
-        echo "EASTMESH_VERSION=$EASTMESH_VERSION" >> "$GITHUB_ENV"
+        echo "SKMESH_VERSION=$SKMESH_VERSION" >> "$GITHUB_ENV"
         echo "FIRMWARE_VERSION=$FIRMWARE_VERSION" >> "$GITHUB_ENV"
         echo "RELEASE_VERSION=$RELEASE_VERSION" >> "$GITHUB_ENV"

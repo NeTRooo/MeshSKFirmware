@@ -164,15 +164,15 @@ build_firmware() {
   fi
 
   # set artifact version string
-  # e.g: v1.2.3-eastmesh-v1.0.1-abcdef
+  # e.g: v1.2.3-skmesh-v1.0.1-abcdef
   FIRMWARE_VERSION_BASE="${FIRMWARE_VERSION}"
-  if [ -n "$EASTMESH_VERSION" ]; then
-    FIRMWARE_VERSION_BASE="${FIRMWARE_VERSION_BASE}-eastmesh-${EASTMESH_VERSION}"
+  if [ -n "$SKMESH_VERSION" ]; then
+    FIRMWARE_VERSION_BASE="${FIRMWARE_VERSION_BASE}-skmesh-${SKMESH_VERSION}"
   fi
   FIRMWARE_VERSION_STRING="${FIRMWARE_VERSION_BASE}-${COMMIT_HASH}"
-  CLIENT_VERSION_STRING="eastmesh-${COMMIT_HASH}"
-  if [ -n "$EASTMESH_VERSION" ]; then
-    CLIENT_VERSION_STRING="eastmesh-${EASTMESH_VERSION}-${COMMIT_HASH}"
+  CLIENT_VERSION_STRING="skmesh-${COMMIT_HASH}"
+  if [ -n "$SKMESH_VERSION" ]; then
+    CLIENT_VERSION_STRING="skmesh-${SKMESH_VERSION}-${COMMIT_HASH}"
   fi
 
   # craft filename
