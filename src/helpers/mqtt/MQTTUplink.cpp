@@ -25,7 +25,7 @@
 #endif
 
 #ifndef CLIENT_VERSION
-  #define CLIENT_VERSION "eastmesh-repeater-mqtt"
+  #define CLIENT_VERSION "skmesh-repeater-mqtt"
 #endif
 
 #ifndef MQTT_DEBUG
@@ -96,12 +96,9 @@ void logMqttMemorySnapshot(const char*, const char* = nullptr) {
 
 }
 
-const MQTTUplink::BrokerSpec MQTTUplink::kBrokerSpecs[3] = {
-    {"eastmesh-au", "eastmesh-au", "mqtt2.eastmesh.au", "wss://mqtt2.eastmesh.au:443/mqtt", kEastmeshBit},
-    {"letsmesh-eu", "letsmesh-eu", "mqtt-eu-v1.letsmesh.net", "wss://mqtt-eu-v1.letsmesh.net:443/mqtt",
-     kLetsmeshEuBit},
-    {"letsmesh-us", "letsmesh-us", "mqtt-us-v1.letsmesh.net", "wss://mqtt-us-v1.letsmesh.net:443/mqtt",
-     kLetsmeshUsBit},
+const MQTTUplink::BrokerSpec MQTTUplink::kBrokerSpecs[2] = {
+    {"skmesh-ru", "skmesh-ru", "mqtt.skmesh.ru", "wss://mqtt.skmesh.ru:443/mqtt", kSkmeshRuBit},
+    {"skmesh-dev", "skmesh-dev", "mqtt.dev.skmesh.ru", "wss://mqtt.dev.skmesh.ru:443/mqtt", kSkmeshDevBit},
 };
 
 MQTTUplink::MQTTUplink(mesh::RTCClock& rtc, mesh::LocalIdentity& identity)
@@ -110,7 +107,7 @@ MQTTUplink::MQTTUplink(mesh::RTCClock& rtc, mesh::LocalIdentity& identity)
        {
   memset(_device_id, 0, sizeof(_device_id));
   MQTTPrefsStore::setDefaults(_prefs);
-  for (size_t i = 0; i < 3; ++i) {
+  for (size_t i = 0; i < 2; ++i) {
     memset(&_brokers[i], 0, sizeof(_brokers[i]));
     _brokers[i].spec = &kBrokerSpecs[i];
   }
@@ -131,7 +128,7 @@ bool MQTTUplink::isTokenRefreshInProgress() const {
 }
 
 bool MQTTUplink::hasEnabledBroker() const {
-  return (_prefs.enabled_mask & 0x07) != 0;
+  return (_prefs.enabled_mask & 0x03) != 0;
 }
 
 bool MQTTUplink::isUnsetIataValue(const char* iata) {
@@ -731,7 +728,7 @@ void MQTTUplink::ensureBroker(BrokerState& broker, bool allow_new_connect) {
 void MQTTUplink::begin(FILESYSTEM* fs) {
   _fs = fs;
   MQTTPrefsStore::load(_fs, _prefs);
-  uint8_t normalized_mask = normalizeEnabledMask(_prefs.enabled_mask & 0x07);
+  uint8_t normalized_mask = normalizeEnabledMask(_prefs.enabled_mask & 0x03);
   if (normalized_mask != _prefs.enabled_mask) {
     _prefs.enabled_mask = normalized_mask;
     savePrefs();
@@ -875,16 +872,16 @@ void MQTTUplink::formatStatusReply(char* reply, size_t reply_size) const {
     return "retry";
   };
 
-  snprintf(reply, reply_size, "> wifi:%s ntp:%s iata:%s eastmesh-au:%s letsmesh-eu:%s letsmesh-us:%s status:%s tx:%s",
+  snprintf(reply, reply_size, "> wifi:%s ntp:%s iata:%s skmesh-ru:%s skmesh-dev:%s status:%s tx:%s",
            (_network != nullptr && _network->isWifiConnected()) ? "up" : "down",
            (_network != nullptr && _network->hasTimeSync()) ? "up" : "wait",
            _prefs.iata,
-           broker_state(kEastmeshBit), broker_state(kLetsmeshEuBit), broker_state(kLetsmeshUsBit),
+           broker_state(kSkmeshRuBit), broker_state(kSkmeshDevBit),
            _prefs.status_enabled ? "on" : "off", _prefs.tx_enabled ? "on" : "off");
 }
 
 bool MQTTUplink::setEndpointEnabled(uint8_t bit, bool enabled) {
-  uint8_t next_mask = _prefs.enabled_mask & 0x07;
+  uint8_t next_mask = _prefs.enabled_mask & 0x03;
   if (enabled) {
     next_mask = normalizeEnabledMask(next_mask | bit);
     if ((next_mask & bit) == 0) {
