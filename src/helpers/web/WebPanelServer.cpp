@@ -2330,18 +2330,6 @@ const char kWebPanelAppHtml[] PROGMEM = R"HTML(
         return false;
       }
     }
-	    function getLetsmeshMode() {
-	      const eu = document.getElementById("mqttLetsmeshEu");
-	      const us = document.getElementById("mqttLetsmeshUs");
-	      const euOn = eu && eu.checked;
-	      const usOn = us && us.checked;
-	      if (euOn && usOn) return "both";
-	      if (euOn) return "eu";
-	      if (usOn) return "us";
-	      return "off";
-	    }
-	    function refreshEastmeshModeUi() {
-	      const input = document.getElementById("mqttEastmeshAu");
 	    function refreshBrokerModeUi(inputId, labelAttr) {
 	      const input = document.getElementById(inputId);
 	      const enabled = !!(input && input.checked);
