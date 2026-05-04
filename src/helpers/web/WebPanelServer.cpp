@@ -754,7 +754,7 @@ const char kWebPanelAppHtml[] PROGMEM = R"HTML(
               </div>
             </div>
             <div class="field-card">
-              <label class="label" for="regionState">Region (Australia)</label>
+              <label class="label" for="regionState">Region (Russia)</label>
               <div class="inline-actions two-actions">
                 <select id="regionState">
                   <option value="">Select state</option>
@@ -847,67 +847,84 @@ const char kWebPanelAppHtml[] PROGMEM = R"HTML(
               <optgroup label="Configuration">
                 <option value="UNSET">UNSET - To be configured</option>
               </optgroup>
-              <optgroup label="ACT">
-                <option value="CBR">CBR - Canberra</option>
+              <optgroup label="Central">
+                <option value="SVO">SVO - Moscow (Sheremetyevo)</option>
+                <option value="DME">DME - Moscow (Domodedovo)</option>
+                <option value="VKO">VKO - Moscow (Vnukovo)</option>
+                <option value="VOZ">VOZ - Voronezh</option>
+                <option value="BZK">BZK - Bryansk</option>
+                <option value="IWA">IWA - Ivanovo</option>
+                <option value="KLF">KLF - Kaluga</option>
+                <option value="RYB">RYB - Ryazan</option>
+                <option value="TUL">TUL - Tula</option>
+                <option value="YAR">YAR - Yaroslavl</option>
               </optgroup>
-              <optgroup label="New South Wales">
-                <option value="ABX">ABX - Albury</option>
-                <option value="ARM">ARM - Armidale</option>
-                <option value="BHQ">BHQ - Broken Hill</option>
-                <option value="BNK">BNK - Ballina</option>
-                <option value="CFS">CFS - Coffs Harbour</option>
-                <option value="DBO">DBO - Dubbo</option>
-                <option value="GFF">GFF - Griffith</option>
-                <option value="GFN">GFN - Grafton</option>
-                <option value="LDH">LDH - Lord Howe Island</option>
-                <option value="LSY">LSY - Lismore</option>
-                <option value="MIM">MIM - Merimbula</option>
-                <option value="MRZ">MRZ - Moree</option>
-                <option value="MYA">MYA - Moruya</option>
-                <option value="NTL">NTL - Newcastle</option>
-                <option value="OAG">OAG - Orange</option>
-                <option value="PQQ">PQQ - Port Macquarie</option>
-                <option value="SYD">SYD - Sydney</option>
-                <option value="WGA">WGA - Wagga Wagga</option>
+              <optgroup label="Northwestern">
+                <option value="LED">LED - Saint Petersburg</option>
+                <option value="KGD">KGD - Kaliningrad</option>
+                <option value="MMK">MMK - Murmansk</option>
+                <option value="ARH">ARH - Arkhangelsk</option>
+                <option value="PES">PES - Petrozavodsk</option>
+                <option value="VGD">VGD - Vologda</option>
+                <option value="PKV">PKV - Pskov</option>
+                <option value="SCW">SCW - Syktyvkar</option>
               </optgroup>
-              <optgroup label="Queensland">
-                <option value="ABM">ABM - Bamaga</option>
-                <option value="BNE">BNE - Brisbane</option>
-                <option value="CNS">CNS - Cairns</option>
-                <option value="HTI">HTI - Hamilton Island</option>
-                <option value="HVB">HVB - Hervey Bay</option>
-                <option value="ISA">ISA - Mount Isa</option>
-                <option value="LRE">LRE - Longreach</option>
-                <option value="MCY">MCY - Sunshine Coast</option>
-                <option value="MKY">MKY - Mackay</option>
-                <option value="OOL">OOL - Gold Coast</option>
-                <option value="PPP">PPP - Proserpine</option>
-                <option value="ROK">ROK - Rockhampton</option>
-                <option value="TSV">TSV - Townsville</option>
-                <option value="WEI">WEI - Weipa</option>
-                <option value="WTB">WTB - Toowoomba Wellcamp</option>
+              <optgroup label="Southern">
+                <option value="ROV">ROV - Rostov-on-Don</option>
+                <option value="KRR">KRR - Krasnodar</option>
+                <option value="AER">AER - Sochi</option>
+                <option value="VOG">VOG - Volgograd</option>
+                <option value="ASF">ASF - Astrakhan</option>
+                <option value="AAQ">AAQ - Anapa</option>
               </optgroup>
-              <optgroup label="South Australia">
-                <option value="ADL">ADL - Adelaide</option>
-                <option value="KGC">KGC - Kingscote</option>
-                <option value="MGB">MGB - Mount Gambier</option>
-                <option value="PLO">PLO - Port Lincoln</option>
-                <option value="WYA">WYA - Whyalla</option>
+              <optgroup label="North Caucasus">
+                <option value="MRV">MRV - Mineralnye Vody</option>
+                <option value="STW">STW - Stavropol</option>
+                <option value="OGZ">OGZ - Vladikavkaz</option>
+                <option value="MCX">MCX - Makhachkala</option>
+                <option value="NAL">NAL - Nalchik</option>
+                <option value="GRV">GRV - Grozny</option>
               </optgroup>
-              <optgroup label="Tasmania">
-                <option value="BWT">BWT - Burnie</option>
-                <option value="DPO">DPO - Devonport</option>
-                <option value="FLS">FLS - Flinders Island</option>
-                <option value="HBA">HBA - Hobart</option>
-                <option value="KNS">KNS - King Island</option>
-                <option value="LST">LST - Launceston</option>
+              <optgroup label="Volga">
+                <option value="KZN">KZN - Kazan</option>
+                <option value="UFA">UFA - Ufa</option>
+                <option value="KUF">KUF - Samara</option>
+                <option value="GOJ">GOJ - Nizhny Novgorod</option>
+                <option value="PEE">PEE - Perm</option>
+                <option value="REN">REN - Orenburg</option>
+                <option value="ULV">ULV - Ulyanovsk</option>
+                <option value="CSY">CSY - Cheboksary</option>
+                <option value="IJK">IJK - Izhevsk</option>
+                <option value="SKX">SKX - Saransk</option>
+                <option value="PNZ">PNZ - Penza</option>
               </optgroup>
-              <optgroup label="Victoria">
-                <option value="AVV">AVV - Avalon</option>
-                <option value="GEX">GEX - Geelong West</option>
-                <option value="MEB">MEB - Essendon Fields</option>
-                <option value="MEL">MEL - Melbourne</option>
-                <option value="MQL">MQL - Mildura</option>
+              <optgroup label="Urals">
+                <option value="SVX">SVX - Yekaterinburg</option>
+                <option value="CEK">CEK - Chelyabinsk</option>
+                <option value="TJM">TJM - Tyumen</option>
+                <option value="KRO">KRO - Kurgan</option>
+              </optgroup>
+              <optgroup label="Siberian">
+                <option value="OVB">OVB - Novosibirsk</option>
+                <option value="OMS">OMS - Omsk</option>
+                <option value="KJA">KJA - Krasnoyarsk</option>
+                <option value="IKT">IKT - Irkutsk</option>
+                <option value="BAX">BAX - Barnaul</option>
+                <option value="TOF">TOF - Tomsk</option>
+                <option value="KEJ">KEJ - Kemerovo</option>
+                <option value="NOZ">NOZ - Novokuznetsk</option>
+                <option value="ABA">ABA - Abakan</option>
+                <option value="UUD">UUD - Ulan-Ude</option>
+                <option value="HTA">HTA - Chita</option>
+              </optgroup>
+              <optgroup label="Far Eastern">
+                <option value="VVO">VVO - Vladivostok</option>
+                <option value="KHV">KHV - Khabarovsk</option>
+                <option value="PKC">PKC - Petropavlovsk-Kamchatsky</option>
+                <option value="YKS">YKS - Yakutsk</option>
+                <option value="UUS">UUS - Yuzhno-Sakhalinsk</option>
+                <option value="GDX">GDX - Magadan</option>
+                <option value="DYR">DYR - Anadyr</option>
               </optgroup>
             </select>
             <button class="iconbtn" data-load-cmd="get mqtt.iata" data-load-input="mqttIata" title="Refresh MQTT IATA">&#8635;</button>
@@ -1022,12 +1039,14 @@ const char kWebPanelAppHtml[] PROGMEM = R"HTML(
     let pageLoadGeneration = 0;
     const PANEL_TITLE_KEY = "repeater-panel-title";
     const REGION_STATE_CODES = {
-      "ACT": "act",
-      "New South Wales": "nsw",
-      "Queensland": "qld",
-      "South Australia": "sa",
-      "Tasmania": "tas",
-      "Victoria": "vic"
+      "Central": "cfd",
+      "Northwestern": "nwfd",
+      "Southern": "sfd",
+      "North Caucasus": "ncfd",
+      "Volga": "vfd",
+      "Urals": "ufd",
+      "Siberian": "sifd",
+      "Far Eastern": "fefd"
     };
     const TOKEN_KEY = "repeater-token";
     function readStoredToken() {
@@ -1269,7 +1288,7 @@ const char kWebPanelAppHtml[] PROGMEM = R"HTML(
         const code = REGION_STATE_CODES[label];
         if (!code || seen.has(code)) return;
         seen.add(code);
-        const value = "au-" + code;
+        const value = "ru-" + code;
         options.push(`<option value="${escapeHtml(value)}">${escapeHtml(label)} (${escapeHtml(value)})</option>`);
       });
       regionSelect.innerHTML = options.join("");
@@ -1289,7 +1308,7 @@ const char kWebPanelAppHtml[] PROGMEM = R"HTML(
       }
       const allowed = parseReplyValue(result.text).toLowerCase().split(",").map((item) => item.trim());
       for (const value of allowed) {
-        if (value.startsWith("au-") && selectHasOption(regionSelect, value)) {
+        if (value.startsWith("ru-") && selectHasOption(regionSelect, value)) {
           regionSelect.value = value;
           setRegionStatus("", false);
           return;
@@ -1301,14 +1320,14 @@ const char kWebPanelAppHtml[] PROGMEM = R"HTML(
     async function saveRegionSelection() {
       const regionSelect = document.getElementById("regionState");
       if (!regionSelect || !regionSelect.value) {
-        setRegionStatus("Select an AU state region first.", true);
+        setRegionStatus("Select a region first.", true);
         return;
       }
       const region = regionSelect.value;
       const commands = [
-        "region put au",
+        "region put ru",
         "region put " + region,
-        "region allowf au",
+        "region allowf ru",
         "region allowf " + region,
         "region save"
       ];
@@ -1320,7 +1339,7 @@ const char kWebPanelAppHtml[] PROGMEM = R"HTML(
           return;
         }
       }
-      setRegionStatus("Saved au and " + region + ".", false);
+      setRegionStatus("Saved ru and " + region + ".", false);
     }
     function setGhostNodeModeStatus(message, isError) {
       const el = document.getElementById("ghostNodeModeStatus");
