@@ -1402,7 +1402,7 @@
                 
                   
   
-    <a href="https://github.com/xJARiD/MeshCore-EastMesh/edit/main/docs/web-panel.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/xJARiD/MeshCore-EastMesh/edit/main/eastmesh-docs/web-panel.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-file-pen" viewBox="0 0 24 24"><path d="M12.659 22H18a2 2 0 0 0 2-2V8a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 14 2H6a2 2 0 0 0-2 2v9.34"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10.378 12.622a1 1 0 0 1 3 3.003L8.36 20.637a2 2 0 0 1-.854.506l-2.867.837a.5.5 0 0 1-.62-.62l.836-2.869a2 2 0 0 1 .506-.853z"/></svg>
     </a>
@@ -1458,7 +1458,7 @@
 </ol>
 <p>Useful CLI commands:</p>
 <ul>
-<li><code>get wifi.status</code>: shows WiFi state and IP address when connected.</li>
+<li><code>get wifi.status</code>: shows WiFi state, IP address, channel, and signal when connected.</li>
 <li><code>get web.status</code>: shows whether the web panel is up and which URL to use.</li>
 </ul>
 <p>Example:</p>
@@ -1596,6 +1596,8 @@
 <li>while <code>mqtt.iata</code> is <code>UNSET</code>, enabled MQTT brokers do not attempt to connect</li>
 <li>the current MQTT server states are loaded when the page opens</li>
 <li>you can toggle each MQTT server on or off from this panel</li>
+<li>turning off a connected MQTT server publishes retained offline status before the client disconnects</li>
+<li>changing <code>mqtt.iata</code> away from a configured value publishes retained offline status to the old status topic, restarts connected broker clients, and reconnects under the new topic path</li>
 <li>if all three servers are enabled at once, the panel shows a warning recommending two at most</li>
 </ul>
 <h2 id="stats-overview"><code>/stats</code> Overview<a class="headerlink" href="#stats-overview" title="Permanent link">&para;</a></h2>
