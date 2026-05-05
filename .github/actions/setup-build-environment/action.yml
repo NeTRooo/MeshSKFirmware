@@ -42,11 +42,13 @@ runs:
 
     # Active release tag formats:
     #   companion-wifi-v1.2.3
+    #   repeater-bridge-espnow-v1.2.3
     #   repeater-mqtt-skmesh-v1.0.1
     # with OFFICIAL_MESHCORE_VERSION=v1.2.3 configured as a GitHub variable.
     #
     # This exports:
     #   companion-wifi-v1.2.3 -> FIRMWARE_VERSION=v1.2.3, RELEASE_VERSION=v1.2.3
+    #   repeater-bridge-espnow-v1.2.3 -> FIRMWARE_VERSION=v1.2.3, RELEASE_VERSION=v1.2.3
     #   repeater-mqtt-skmesh-v1.0.1 -> FIRMWARE_VERSION=v1.2.3, SKMESH_VERSION=v1.0.1,
     #                                  RELEASE_VERSION=v1.2.3-skmesh-v1.0.1
     - name: Extract Version Info
@@ -75,6 +77,8 @@ runs:
           fi
           SKMESH_VERSION="${BASH_REMATCH[1]}"
         elif [[ "$GIT_TAG_NAME" =~ ^companion-wifi-(v[[:alnum:]._-]+)$ ]]; then
+          FIRMWARE_VERSION="${BASH_REMATCH[1]}"
+        elif [[ "$GIT_TAG_NAME" =~ ^repeater-bridge-espnow-(v[[:alnum:]._-]+)$ ]]; then
           FIRMWARE_VERSION="${BASH_REMATCH[1]}"
         else
           echo "Unsupported release tag format: $GIT_TAG_NAME" >&2

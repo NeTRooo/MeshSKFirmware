@@ -32,14 +32,14 @@ Only modify code for clearly scoped EastMesh features:
 
 | Change                | File                 |
 | --------------------- | -------------------- |
-| CLI                   | `docs/custom-cli.md` |
-| Web panel UI/behavior | `docs/web-panel.md`  |
+| CLI                   | `eastmesh-docs/custom-cli.md` |
+| Web panel UI/behavior | `eastmesh-docs/web-panel.md`  |
 | Releases              | `release-notes.yml`  |
-| Flashing guidance     | `docs/releases.md`   |
+| Flashing guidance     | `eastmesh-docs/releases.md`   |
 
 ### Web Panel Gate
 
-If editing `examples/simple_repeater/MyMesh.cpp`, also update `docs/custom-cli.md`.
+If editing `examples/simple_repeater/MyMesh.cpp`, also update `eastmesh-docs/custom-cli.md`.
 
 ## Tooling
 
@@ -81,7 +81,7 @@ Do not assume `pio` is installed globally.
 List build targets:
 
 ```bash
-bash build.sh list
+bash eastmesh-build.sh list
 ```
 
 Build a single target:
@@ -98,8 +98,8 @@ Build with release-style metadata:
 ```bash
 export FIRMWARE_VERSION=v1.14.1
 export EASTMESH_VERSION=v1.0.1
-bash build.sh build-firmware heltec_v4_repeater_mqtt
-bash build.sh build-firmware T_Beam_S3_Supreme_SX1262_repeater_mqtt
+bash eastmesh-build.sh build-firmware heltec_v4_repeater_mqtt
+bash eastmesh-build.sh build-firmware T_Beam_S3_Supreme_SX1262_repeater_mqtt
 ```
 
 Flash a target:
@@ -111,29 +111,36 @@ uv run pio run -e T_Beam_S3_Supreme_SX1262_repeater_mqtt -t upload --upload-port
 
 ## Key Files
 
-- `build.sh` — build wrapper
+- `eastmesh-build.sh` — EastMesh build wrapper
+- `build.sh` — upstream MeshCore build wrapper retained for merge hygiene
 - `platformio.ini`
 - `variants/eastmesh_mqtt/platformio.ini`
 - `examples/simple_repeater/MyMesh.cpp`
 - `src/helpers/mqtt/MQTTUplink.cpp`
-- `docs/*.md`
+- `eastmesh-docs/*.md`
 - `RELEASE.md`
 - `release-notes.yml`
+
+## Workflow Ownership
+
+EastMesh workflows use the `eastmesh-*.yml` prefix in `.github/workflows/`.
+
+Upstream MeshCore workflows may remain under their original filenames for merge hygiene. Do not adapt them for EastMesh behavior; keep them close to upstream and disable them in GitHub Actions for this repository.
 
 ## Docs Sync Requirements
 
 If you change any of the following, update docs in the same PR when practical:
 
 - Web-panel commands:
-  - update `docs/custom-cli.md`
+  - update `eastmesh-docs/custom-cli.md`
 - Web-panel user-facing behavior, sections, controls, or troubleshooting:
-  - update `docs/web-panel.md`
+  - update `eastmesh-docs/web-panel.md`
 - EastMesh CLI additions or changed semantics:
-  - update `docs/custom-cli.md`
+  - update `eastmesh-docs/custom-cli.md`
 - Release/tag preparation:
   - update `release-notes.yml`
 - Flashing/release asset guidance:
-  - update `docs/releases.md`
+  - update `eastmesh-docs/releases.md`
 
 ## Repeater MQTT Notes
 
@@ -163,14 +170,18 @@ Current tag formats:
 
 ```bash
 git tag companion-wifi-v1.2.3
+git tag repeater-bridge-espnow-v1.2.3
+git tag repeater-mqtt-bridge-eastmesh-v1.0.1
 git tag repeater-mqtt-eastmesh-v1.0.1
 ```
 
 Rules:
 
 - `companion-wifi` tags use the upstream MeshCore version directly
+- `repeater-bridge-espnow` tags use the upstream MeshCore version directly
+- `repeater-mqtt-bridge` tags use the EastMesh release version in the tag
 - `repeater-mqtt` tags use the EastMesh release version in the tag
-- GitHub Actions variable `OFFICIAL_MESHCORE_VERSION` supplies the upstream base version for repeater MQTT release builds
+- GitHub Actions variable `OFFICIAL_MESHCORE_VERSION` supplies the upstream base version for repeater MQTT and repeater MQTT bridge release builds
 - if the upstream MeshCore release version changes, update `OFFICIAL_MESHCORE_VERSION` in GitHub before cutting release tags
 
 Typical release flow:

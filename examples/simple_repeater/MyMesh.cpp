@@ -1348,8 +1348,8 @@ void MyMesh::begin(FILESYSTEM *fs, ArchiveStorage* archive) {
   mqtt.begin(_fs);
 #endif
 
-  radio_set_params(_prefs.freq, _prefs.bw, _prefs.sf, _prefs.cr);
-  radio_set_tx_power(_prefs.tx_power_dbm);
+  radio_driver.setParams(_prefs.freq, _prefs.bw, _prefs.sf, _prefs.cr);
+  radio_driver.setTxPower(_prefs.tx_power_dbm);
 
   radio_driver.setRxBoostedGainMode(_prefs.rx_boosted_gain);
   MESH_DEBUG_PRINTLN("RX Boosted Gain Mode: %s",
@@ -1464,7 +1464,7 @@ void MyMesh::dumpLogFile() {
 }
 
 void MyMesh::setTxPower(int8_t power_dbm) {
-  radio_set_tx_power(power_dbm);
+  radio_driver.setTxPower(power_dbm);
 }
 
 #if defined(USE_SX1262) || defined(USE_SX1268)
@@ -2233,11 +2233,11 @@ void MyMesh::handleCommand(uint32_t sender_timestamp, char *command, char *reply
     }
 #endif
 #if defined(ESP_PLATFORM)
-  } else if (memcmp(command, "get wifi.status", 15) == 0) {
+  } else if (strcmp(command, "get wifi.status") == 0) {
     network.formatWifiStatusReply(reply, 160);
-  } else if (memcmp(command, "get wifi.ssid", 13) == 0) {
+  } else if (strcmp(command, "get wifi.ssid") == 0) {
     sprintf(reply, "> %s", network.getWifiSSID()[0] ? network.getWifiSSID() : "-");
-  } else if (memcmp(command, "get wifi.powersaving", 20) == 0) {
+  } else if (strcmp(command, "get wifi.powersaving") == 0) {
     sprintf(reply, "> %s", network.getWifiPowerSave());
 #endif
 #if defined(ESP_PLATFORM) && WITH_WEB_PANEL
@@ -2308,21 +2308,21 @@ void MyMesh::handleCommand(uint32_t sender_timestamp, char *command, char *reply
     mqtt.formatStatusReply(reply, 160);
   } else if (strcmp(command, "get mqtt.client_version") == 0) {
     sprintf(reply, "> %s", mqtt.getClientVersion());
-  } else if (memcmp(command, "get mqtt.iata", 13) == 0) {
+  } else if (strcmp(command, "get mqtt.iata") == 0) {
     sprintf(reply, "> %s", mqtt.getIata());
-  } else if (memcmp(command, "get mqtt.owner", 14) == 0) {
+  } else if (strcmp(command, "get mqtt.owner") == 0) {
     sprintf(reply, "> %s", mqtt.getOwnerPublicKey()[0] ? mqtt.getOwnerPublicKey() : "-");
-  } else if (memcmp(command, "get mqtt.email", 14) == 0) {
+  } else if (strcmp(command, "get mqtt.email") == 0) {
     sprintf(reply, "> %s", mqtt.getOwnerEmail()[0] ? mqtt.getOwnerEmail() : "-");
-  } else if (memcmp(command, "get mqtt.packets", 16) == 0) {
+  } else if (strcmp(command, "get mqtt.packets") == 0) {
     sprintf(reply, "> %s", mqtt.isPacketsEnabled() ? "on" : "off");
-  } else if (memcmp(command, "get mqtt.raw", 12) == 0) {
+  } else if (strcmp(command, "get mqtt.raw") == 0) {
     sprintf(reply, "> %s", mqtt.isRawEnabled() ? "on" : "off");
-  } else if (memcmp(command, "get mqtt.tx", 11) == 0) {
+  } else if (strcmp(command, "get mqtt.tx") == 0) {
     sprintf(reply, "> %s", mqtt.isTxEnabled() ? "on" : "off");
-  } else if (memcmp(command, "get mqtt.skmesh-ru", 18) == 0 || memcmp(command, "get mqtt.skmesh.ru", 18) == 0) {
+  } else if (strcmp(command, "get mqtt.skmesh-ru") == 0 || strcmp(command, "get mqtt.skmesh.ru") == 0) {
     sprintf(reply, "> %s", mqtt.isEndpointEnabled(0x01) ? "on" : "off");
-  } else if (memcmp(command, "get mqtt.skmesh-dev", 19) == 0 || memcmp(command, "get mqtt.skmesh.dev", 19) == 0) {
+  } else if (strcmp(command, "get mqtt.skmesh-dev") == 0 || strcmp(command, "get mqtt.skmesh.dev") == 0) {
     sprintf(reply, "> %s", mqtt.isEndpointEnabled(0x02) ? "on" : "off");
   } else if (memcmp(command, "set mqtt.tx ", 12) == 0) {
     mqtt.setTxEnabled(memcmp(&command[12], "on", 2) == 0);
@@ -2766,13 +2766,13 @@ void MyMesh::loop() {
 
   if (set_radio_at && millisHasNowPassed(set_radio_at)) { // apply pending (temporary) radio params
     set_radio_at = 0;                                     // clear timer
-    radio_set_params(pending_freq, pending_bw, pending_sf, pending_cr);
+    radio_driver.setParams(pending_freq, pending_bw, pending_sf, pending_cr);
     MESH_DEBUG_PRINTLN("Temp radio params");
   }
 
   if (revert_radio_at && millisHasNowPassed(revert_radio_at)) { // revert radio params to orig
     revert_radio_at = 0;                                        // clear timer
-    radio_set_params(_prefs.freq, _prefs.bw, _prefs.sf, _prefs.cr);
+    radio_driver.setParams(_prefs.freq, _prefs.bw, _prefs.sf, _prefs.cr);
     MESH_DEBUG_PRINTLN("Radio params restored");
   }
 

@@ -1,25 +1,5 @@
 #!/usr/bin/env bash
 
-require_uv() {
-  if ! command -v uv >/dev/null 2>&1; then
-    echo "uv is required. Install it from https://docs.astral.sh/uv/" >&2
-    exit 1
-  fi
-}
-
-sync_python_tooling() {
-  uv sync --locked --no-group docs >/dev/null
-  uv venv --allow-existing --seed >/dev/null
-}
-
-run_python() {
-  uv run --no-sync python "$@"
-}
-
-run_pio() {
-  uv run --no-sync pio "$@"
-}
-
 global_usage() {
   cat - <<EOF
 Usage:
@@ -32,9 +12,7 @@ Commands:
   build-firmwares: Build all firmwares for all targets.
   build-matching-firmwares <build-match-spec>: Build all firmwares for build targets containing the string given for <build-match-spec>.
   build-companion-firmwares: Build all companion firmwares for all build targets.
-  build-companion-wifi-firmwares: Build all companion WiFi firmwares for all build targets.
   build-repeater-firmwares: Build all repeater firmwares for all build targets.
-  build-repeater-mqtt-firmwares: Build all repeater MQTT firmwares for all build targets.
   build-room-server-firmwares: Build all chat room server firmwares for all build targets.
 
 Examples:
@@ -47,14 +25,8 @@ $ sh build.sh build-matching-firmwares <build-match-spec>
 Build all companion firmwares
 $ sh build.sh build-companion-firmwares
 
-Build all companion WiFi firmwares
-$ sh build.sh build-companion-wifi-firmwares
-
 Build all repeater firmwares
 $ sh build.sh build-repeater-firmwares
-
-Build all repeater MQTT firmwares
-$ sh build.sh build-repeater-mqtt-firmwares
 
 Build all chat room server firmwares
 $ sh build.sh build-room-server-firmwares
@@ -77,7 +49,7 @@ EOF
 
 # get a list of pio env names that start with "env:"
 get_pio_envs() {
-  run_pio project config | grep 'env:' | sed 's/env://'
+  pio project config | grep 'env:' | sed 's/env://'
 }
 
 # Catch cries for help before doing anything else.
@@ -93,10 +65,7 @@ case $1 in
 esac
 
 # cache project config json for use in get_platform_for_env()
-require_uv
-sync_python_tooling
-
-PIO_CONFIG_JSON=$(run_pio project config --json-output)
+PIO_CONFIG_JSON=$(pio project config --json-output)
 
 # $1 should be the string to find (case insensitive)
 get_pio_envs_containing_string() {
@@ -124,7 +93,7 @@ get_pio_envs_ending_with_string() {
 # $1 should be the environment name
 get_platform_for_env() {
   local env_name=$1
-  echo "$PIO_CONFIG_JSON" | run_python -c "
+  echo "$PIO_CONFIG_JSON" | python3 -c "
 import sys, json, re
 data = json.load(sys.stdin)
 for section, options in data:
@@ -179,25 +148,25 @@ build_firmware() {
   # e.g: RAK_4631_Repeater-v1.0.0-SHA
   FIRMWARE_FILENAME="$1-${FIRMWARE_VERSION_STRING}"
 
-  # add build metadata to end of existing platformio build flags in environment vars
-  export PLATFORMIO_BUILD_FLAGS="${PLATFORMIO_BUILD_FLAGS} -DFIRMWARE_BUILD_DATE='\"${FIRMWARE_BUILD_DATE}\"' -DFIRMWARE_VERSION='\"${FIRMWARE_VERSION}\"' -DCLIENT_VERSION='\"${CLIENT_VERSION_STRING}\"'"
+  # add firmware version info to end of existing platformio build flags in environment vars
+  export PLATFORMIO_BUILD_FLAGS="${PLATFORMIO_BUILD_FLAGS} -DFIRMWARE_BUILD_DATE='\"${FIRMWARE_BUILD_DATE}\"' -DFIRMWARE_VERSION='\"${FIRMWARE_VERSION_STRING}\"'"
 
   # disable debug flags if requested
   disable_debug_flags
 
   # build firmware target
-  run_pio run -e $1
+  pio run -e $1
 
   # build merge-bin for esp32 fresh install, copy .bins to out folder (e.g: Heltec_v3_room_server-v1.0.0-SHA.bin)
   if [ "$ENV_PLATFORM" == "ESP32_PLATFORM" ]; then
-    run_pio run -t mergebin -e $1
+    pio run -t mergebin -e $1
     cp .pio/build/$1/firmware.bin out/${FIRMWARE_FILENAME}.bin 2>/dev/null || true
     cp .pio/build/$1/firmware-merged.bin out/${FIRMWARE_FILENAME}-merged.bin 2>/dev/null || true
   fi
 
   # build .uf2 for nrf52 boards, copy .uf2 and .zip to out folder (e.g: RAK_4631_Repeater-v1.0.0-SHA.uf2)
   if [ "$ENV_PLATFORM" == "NRF52_PLATFORM" ]; then
-    run_python bin/uf2conv/uf2conv.py .pio/build/$1/firmware.hex -c -o .pio/build/$1/firmware.uf2 -f 0xADA52840
+    python3 bin/uf2conv/uf2conv.py .pio/build/$1/firmware.hex -c -o .pio/build/$1/firmware.uf2 -f 0xADA52840
     cp .pio/build/$1/firmware.uf2 out/${FIRMWARE_FILENAME}.uf2 2>/dev/null || true
     cp .pio/build/$1/firmware.zip out/${FIRMWARE_FILENAME}.zip 2>/dev/null || true
   fi
@@ -267,18 +236,6 @@ build_companion_firmwares() {
 
 }
 
-build_companion_wifi_firmwares() {
-
-  build_all_firmwares_by_suffix "_companion_radio_wifi"
-
-}
-
-build_repeater_mqtt_firmwares() {
-
-  build_all_firmwares_by_suffix "_repeater_mqtt"
-
-}
-
 build_room_server_firmwares() {
 
 #  # build specific room server firmwares
@@ -322,12 +279,8 @@ elif [[ $1 == "build-firmwares" ]]; then
   build_firmwares
 elif [[ $1 == "build-companion-firmwares" ]]; then
   build_companion_firmwares
-elif [[ $1 == "build-companion-wifi-firmwares" ]]; then
-  build_companion_wifi_firmwares
 elif [[ $1 == "build-repeater-firmwares" ]]; then
   build_repeater_firmwares
-elif [[ $1 == "build-repeater-mqtt-firmwares" ]]; then
-  build_repeater_mqtt_firmwares
 elif [[ $1 == "build-room-server-firmwares" ]]; then
   build_room_server_firmwares
 fi

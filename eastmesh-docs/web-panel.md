@@ -59,7 +59,7 @@ Some constrained targets disable the web panel to stay within flash limits. If y
 
 Useful CLI commands:
 
-- `get wifi.status`: shows WiFi state and IP address when connected.
+- `get wifi.status`: shows WiFi state, IP address, channel, and signal when connected.
 - `get web.status`: shows whether the web panel is up and which URL to use.
 
 Example:
@@ -221,6 +221,8 @@ Notes:
 - while `mqtt.iata` is `UNSET`, enabled MQTT brokers do not attempt to connect
 - the current MQTT server states are loaded when the page opens
 - you can toggle each MQTT server on or off from this panel
+- turning off a connected MQTT server publishes retained offline status before the client disconnects
+- changing `mqtt.iata` away from a configured value publishes retained offline status to the old status topic, restarts connected broker clients, and reconnects under the new topic path
 - if all three servers are enabled at once, the panel shows a warning recommending two at most
 
 ## `/stats` Overview

@@ -30,7 +30,7 @@ Prebuilt firmware is published on GitHub Releases:
 
 For flashing guidance, including when to use `.bin` vs `-merged.bin`, see:
 
-- [docs/releases.md](./docs/releases.md)
+- [eastmesh-docs/releases.md](./eastmesh-docs/releases.md)
 
 The custom firmware flasher site is:
 
@@ -75,7 +75,7 @@ uv sync
 List available build targets:
 
 ```bash
-bash build.sh list
+bash eastmesh-build.sh list
 ```
 
 Build a single target:
@@ -90,7 +90,7 @@ Build with release-style version metadata:
 ```bash
 export FIRMWARE_VERSION=v1.14.1
 export EASTMESH_VERSION=v1.0.1
-bash build.sh build-firmware heltec_v4_repeater_mqtt
+bash eastmesh-build.sh build-firmware heltec_v4_repeater_mqtt
 ```
 
 Flash a target:
@@ -114,9 +114,11 @@ uv run --group docs zensical build
 
 ## Key Files
 
-- [`build.sh`](./build.sh)
-  - main local build wrapper
+- [`eastmesh-build.sh`](./eastmesh-build.sh)
+  - EastMesh local/release build wrapper
   - injects `FIRMWARE_VERSION`, `CLIENT_VERSION`, and EastMesh release metadata
+- [`build.sh`](./build.sh)
+  - upstream MeshCore build wrapper retained to reduce future merge conflicts
 - [`pyproject.toml`](./pyproject.toml)
   - Python tooling and docs dependencies
 - [`platformio.ini`](./platformio.ini)
@@ -131,8 +133,10 @@ uv run --group docs zensical build
   - companion firmware implementation
 - [`RELEASE.md`](./RELEASE.md)
   - tag formats and release workflow behavior
-- [`docs/`](./docs)
+- [`eastmesh-docs/`](./eastmesh-docs)
   - EastMesh-focused docs published to GitHub Pages
+- [`docs/`](./docs)
+  - upstream MeshCore docs retained to reduce future merge conflicts
 
 ## Key EastMesh Features
 
@@ -188,11 +192,13 @@ These rescue commands are only available after entering `CLI Rescue`:
 
 ## Active GitHub Workflows
 
-- `.github/workflows/build-companion-wifi-firmwares.yml`
-- `.github/workflows/build-repeater-mqtt-firmwares.yml`
-- `.github/workflows/pr-build-check.yml`
-- `.github/workflows/push-build-check.yml`
-- `.github/workflows/github-pages.yml`
+- `.github/workflows/eastmesh-build-companion-wifi-firmwares.yml`
+- `.github/workflows/eastmesh-build-repeater-mqtt-firmwares.yml`
+- `.github/workflows/eastmesh-pr-build-check.yml`
+- `.github/workflows/eastmesh-push-build-check.yml`
+- `.github/workflows/eastmesh-github-pages.yml`
+
+The upstream MeshCore workflows are retained under their original filenames to reduce merge conflicts. They are not part of the EastMesh release flow and should stay disabled in GitHub Actions for this repository.
 
 The current release workflows intentionally focus only on:
 
@@ -225,7 +231,7 @@ Published docs site:
 
 Current docs pages:
 
-- [Home](./docs/index.md)
-- [Download and Flash Releases](./docs/releases.md)
-- [Build Locally With uv](./docs/local-builds.md)
-- [Custom CLI Commands](./docs/custom-cli.md)
+- [Home](./eastmesh-docs/index.md)
+- [Download and Flash Releases](./eastmesh-docs/releases.md)
+- [Build Locally With uv](./eastmesh-docs/local-builds.md)
+- [Custom CLI Commands](./eastmesh-docs/custom-cli.md)
